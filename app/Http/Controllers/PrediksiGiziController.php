@@ -17,6 +17,10 @@ class PrediksiGiziController extends Controller
 
         return view('baby_nutrition.index');
     }
+    public function perhitungan()
+    {
+        return view('perhitungan');
+    }
     public function klasifikasiGiziBayi(Request $request)
     {
         // Mengambil data gizi bayi dari database
@@ -53,7 +57,7 @@ class PrediksiGiziController extends Controller
 
         // ...
         $atributTertinggi = $this->cariAtributDenganGainTertinggi($gainUmur, $gainJenisKelamin, $gainBeratBadan, $gainTinggiBadan);
-
+            
 
         // Kembalikan hasil perhitungan gizi bayi dalam bentuk respons JSON
         return response()->json([

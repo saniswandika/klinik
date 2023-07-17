@@ -20,6 +20,7 @@ Route::get('/', function () {
 });
 Route::resource('users', UserController::class);
 Route::get('/form-prediksi', [PrediksiGiziController::class, 'index'])->name('form-prediksi');
+Route::get('/perhitungan', [PrediksiGiziController::class, 'perhitungan'])->name('perhitungan');
 // Route::post('/form-prediksi', 'PrediksiGiziController@index')->name('index');
 // Route::get('/hasil-prediksi', 'PrediksiGiziController@prediksi')->name('hasil.prediksi');
 

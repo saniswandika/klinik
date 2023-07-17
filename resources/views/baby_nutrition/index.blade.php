@@ -13,8 +13,8 @@
                 <input type="number" step="0.01" name="berat_badan" id="berat_badan" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="panjang_badan">Tinggi Badan</label>
-                <input type="number" step="0.01" name="panjang_badan" id="panjang_badan" class="form-control" required>
+                <label for="panjang_badan   ">Tinggi Badan</label>
+                <input type="number" step="0.01" name="panjang_badan    " id="panjang_badan " class="form-control" required>
             </div>
             <div class="form-group">
                 <label for="jenis_kelamin">Jenis Kelamin</label>

@@ -235,73 +235,55 @@
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-        <div class="card">
-            <div class="card-body">
-                <h4>Node 1</h4>
-                <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Atribut</th>
-                        <th scope="col">Nilai Atribut</th>
-                        <th scope="col">Jumlah Kasus Total</th>
-                        <th scope="col">Jumlah Kasus Gizi Normal</th>
-                        <th scope="col">Jumlah Kasus Gizi Buruk</th>
-                        <th scope="col">Entropy</th>
-                        <th scope="col">Gain</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      
-                    </tbody>
+      <div class="card">
+          <div class="card-body">
+              <h4>Node 1</h4>
+              <div class="table-responsive-sm">                
+                  <table class="table border border-primary" style="width:100%;  border: 1px solid black; border-collapse: collapse; position: relative;">
+                        <tr>
+                          {{-- <th>Name</th>
+                          <th>Name</th> --}}
+                          <th scope="col">No.</th>
+                          <th scope="col">Atribut</th>
+                          <th scope="col">Nilai Atribut</th>
+                          <th scope="col">Jumlah Kasus Total</th>
+                          <th scope="col">Jumlah Kasus Gizi Normal</th>
+                          <th scope="col">Jumlah Kasus Gizi Buruk</th>
+                          <th scope="col">Entropy</th>
+                          <th scope="col">Gain</th>
+                        </tr>
+                        @foreach ($nodes as $node)
+                        <tr>
+                        <td> {{ 0 }}</td>
+                          <th rowspan="{{ count($node['data']) }}">{{ $node['attribute'] }}</th>
+                          <td> {{ $node['data'][0]['nilai_attribute'] }} </td>
+                          <td> {{ $node['data'][0]['jumlah_kasus_total'] }} </td>
+                          <td> {{ $node['data'][0]['jumlah_kasus_gizi_normal'] }} </td>
+                          <td> {{ $node['data'][0]['jumlah_kasus_gizi_buruk'] }} </td>
+                          <td>{{ $node['data'][0]['entrophy'] }}</td>
+                           <td rowspan="{{ count($node['data']) }}">{{ $node['gain'] }}</td>
+                        </tr>
+                        @for ($i = 1; $i < count($node['data']); $i++)                            
+                        <tr>
+                           {{-- <td>Berat Badan</td> --}}
+                           <td></td>
+                           <td>{{ $node['data'][$i]['nilai_attribute'] }}</td>
+                           <td> {{ $node['data'][$i]['jumlah_kasus_total'] }} </td>
+                           <td> {{ $node['data'][$i]['jumlah_kasus_gizi_normal'] }} </td>
+                           <td> {{ $node['data'][$i]['jumlah_kasus_gizi_buruk'] }} </td>
+                          <td>{{ $node['data'][$i]['entrophy'] }}</td>
+                        </tr>
+                        @endfor   
+                        @endforeach
+                     <tr>
+                        <td colspan="8" style="display: flex; justify-content: end; width: 100%; position: absolute">Total Gain Tertinggi : {{ $gainTertinggi }}</td>
+                     </tr>
                   </table>
-            </div>
-        </div>
-        <div class="card mt-4">
-            <div class="card-body">
-                <h4>Node 2</h4>
-                <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Atribut</th>
-                        <th scope="col">Nilai Atribut</th>
-                        <th scope="col">Jumlah Kasus Total</th>
-                        <th scope="col">Jumlah Kasus Gizi Normal</th>
-                        <th scope="col">Jumlah Kasus Gizi Buruk</th>
-                        <th scope="col">Entropy</th>
-                        <th scope="col">Gain</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      
-                    </tbody>
-                  </table>
-            </div>
-        </div>
-        <div class="card mt-4">
-            <div class="card-body">
-                <h4>Node 3</h4>
-                <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Atribut</th>
-                        <th scope="col">Nilai Atribut</th>
-                        <th scope="col">Jumlah Kasus Total</th>
-                        <th scope="col">Jumlah Kasus Gizi Normal</th>
-                        <th scope="col">Jumlah Kasus Gizi Buruk</th>
-                        <th scope="col">Entropy</th>
-                        <th scope="col">Gain</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      
-                    </tbody>
-                  </table>
-            </div>
-        </div>
-    </div>
+                  
+              </div>
+          </div>
+      </div>
+  </div>
   </main>
   <div class="fixed-plugin">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">

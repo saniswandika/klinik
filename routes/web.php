@@ -20,11 +20,12 @@ Route::get('/', function () {
 });
 Route::resource('users', UserController::class);
 Route::get('/form-prediksi', [PrediksiGiziController::class, 'index'])->name('form-prediksi');
+Route::get('/table-prediksi', [PrediksiGiziController::class, 'perhitungan'])->name('table-prediksi');
 Route::get('/perhitungan', [PrediksiGiziController::class, 'perhitungan'])->name('perhitungan');
 // Route::post('/form-prediksi', 'PrediksiGiziController@index')->name('index');
 // Route::get('/hasil-prediksi', 'PrediksiGiziController@prediksi')->name('hasil.prediksi');
 
-Route::post('/baby_nutrition', [PrediksiGiziController::class, 'klasifikasiGiziBayi'])->name('baby_nutrition.predict');
+Route::post('/baby_nutrition', [PrediksiGiziController::class, 'predict'])->name('baby_nutrition.predict');
 
 Auth::routes();
 

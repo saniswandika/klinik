@@ -13,14 +13,171 @@ class PrediksiGiziController extends Controller
 {
     public function index()
     {
-
-
         return view('baby_nutrition.index');
     }
-    public function perhitungan()
-    {
-        return view('perhitungan');
+
+    public function predict(Request $request) {
+      $result = '';
+
+      if ($request->berat_badan > 16) {
+         $result = 'Gizi Normal';
+      } else {
+         if ($request->berat_badan > 14) {
+            if ($request->usia > 36) {
+               $result = 'Gizi Buruk';
+            } else {
+               $result = 'Gizi Normal';
+            }
+         } else {
+            if ($request->usia > 13) {
+               if ($request->usia > 17) {
+                  $result = 'Gizi Buruk';
+               } else {
+                  if ($request->panjang_badan > 83) {
+                     if ($request->jenis_kelamin == 'L') {
+                        $result = 'Gizi Buruk';
+                     } else {
+                        $result = 'Gizi Normal';
+                     }
+                  } else{
+                     $result = 'Gizi Buruk';
+                  }
+               }
+            } else {
+               if ($request->berat_badan > 9.8) {
+                  $result = 'Gizi Normal';
+               } else {
+                  $result = 'Gizi Buruk';
+               }
+            }
+         }
+      }
+
+   
+
+      $data = [
+         "Berat_Badan" => $request->berat_badan,
+         "jenis_kelamin" => $request->jenis_kelamin,
+         "Umur_bulan" => $request->usia,
+         "tinggi_badan" => $request->panjang_badan,
+         "status_gizi" => $result
+      ];
+
+      dd($data);
+
+      data_bayi_posyandu::create($data);
     }
+
+    public function tablePrediksi() {
+      return view('baby_nutrition.table');
+    }
+
+    public function perhitungan() {
+      $data = data_bayi_posyandu::all();
+      $gainTinggiBadan = $this->hitungGainTinggiBadan($data);
+      $gainBeratBadan = $this->hitungGainBeratBadan($data);
+      $gainUmur = $this->hitungGainUmur($data);
+      $gainJenisKelamin = $this->hitungGainJenisKelamin($data);
+
+      $nodes = [
+         [
+            "attribute" => 'Berat Badan',
+            "data" => [
+               [
+                  "nilai_attribute" => "Lebih dari 16",
+                  "jumlah_kasus_total" => data_bayi_posyandu::where('Berat_Badan', '>', 16.0)->count(),
+                  "jumlah_kasus_gizi_normal" => data_bayi_posyandu::where('Berat_Badan', '>', 16.0)->where('status_gizi', '=', 'Normal')->count(),
+                  "jumlah_kasus_gizi_buruk" => data_bayi_posyandu::where('Berat_Badan', '>', 16.0)->where('status_gizi', '=', 'Buruk')->count(),
+                  "entrophy" => $this->hitungEntropyBeratBadan($data->where('Berat_Badan', '>', 16.0))
+               ],
+               [
+                  "nilai_attribute" => "14 sampai 16",
+                  "jumlah_kasus_total" => data_bayi_posyandu::where('Berat_Badan', '>', 14.0)->where('Berat_Badan', '<', 16.0)->count(),
+                  "jumlah_kasus_gizi_normal" => data_bayi_posyandu::where('Berat_Badan', '>', 14.0)->where('Berat_Badan', '<', 16.0)->where('status_gizi', '=', 'Normal')->count(),
+                  "jumlah_kasus_gizi_buruk" => data_bayi_posyandu::where('Berat_Badan', '>', 14.0)->where('Berat_Badan', '<', 16.0)->where('status_gizi', '=', 'Buruk')->count(),
+                  "entrophy" => $this->hitungEntropyBeratBadan($data->where('Berat_Badan', '>', 14.0)->where('Berat_Badan', '<=', 16.0))
+               ],
+               [
+                  "nilai_attribute" => "kurang dari 14",
+                  "jumlah_kasus_total" => data_bayi_posyandu::where('Berat_Badan', '<', 14.0)->count(),
+                  "jumlah_kasus_gizi_normal" => data_bayi_posyandu::where('Berat_Badan', '<', 14.0)->where('status_gizi', '=', 'Normal')->count(),
+                  "jumlah_kasus_gizi_buruk" => data_bayi_posyandu::where('Berat_Badan', '<', 14.0)->where('status_gizi', '=', 'Buruk')->count(),
+                  "entrophy" => $this->hitungEntropyBeratBadan($data->where('Berat_Badan', '<', 14.0)),
+
+               ],
+            ],
+            "gain" => $gainBeratBadan   
+         ],
+         [
+            "attribute" => 'Umur',
+            "data" => [
+               [
+                  "nilai_attribute" => "kurang dari 14",
+                  "jumlah_kasus_total" => data_bayi_posyandu::where('Umur_bulan', '<', 14.0)->count(),
+                  "jumlah_kasus_gizi_normal" => data_bayi_posyandu::where('Umur_bulan', '<', 14.0)->where('status_gizi', '=', 'Normal')->count(),
+                  "jumlah_kasus_gizi_buruk" => data_bayi_posyandu::where('Umur_bulan', '<', 14.0)->where('status_gizi', '=', 'Buruk')->count(),
+                  "entrophy" => $this->hitungEntropyUmur($data->where('Umur_bulan', '<', 14.0))
+               ],
+               [
+                  "nilai_attribute" => "lebih dari sama dengan 14",
+                  "jumlah_kasus_total" => data_bayi_posyandu::where('Umur_bulan', '>=', 14.0)->count(),
+                  "jumlah_kasus_gizi_normal" => data_bayi_posyandu::where('Umur_bulan', '>=', 14.0)->where('status_gizi', '=', 'Normal')->count(),
+                  "jumlah_kasus_gizi_buruk" => data_bayi_posyandu::where('Umur_bulan', '>=', 14.0)->where('status_gizi', '=', 'Buruk')->count(),
+                  "entrophy" => $this->hitungEntropyUmur($data->where('Umur_bulan', '>=', 14.0))
+               ]
+            ],
+            "gain" => $gainUmur
+         ],
+         [
+            "attribute" => 'Tinggi Badan',
+            "data" => [
+               [
+                  "nilai_attribute" => "kurang dari 83",
+                  "jumlah_kasus_total" => data_bayi_posyandu::where('tinggi_badan', '<', 83.0)->count(),
+                  "jumlah_kasus_gizi_normal" => data_bayi_posyandu::where('tinggi_badan', '<', 83.0)->where('status_gizi', '=', 'Normal')->count(),
+                  "jumlah_kasus_gizi_buruk" => data_bayi_posyandu::where('tinggi_badan', '<', 83.0)->where('status_gizi', '=', 'Buruk')->count(),
+                  "entrophy" => $this->hitungEntropyTinggiBadan($data->where('tinggi_badan', '<', 83.0))
+               ],
+               [
+                  "nilai_attribute" => "lebih dari sama dengan 83",
+                  "jumlah_kasus_total" => data_bayi_posyandu::where('tinggi_badan', '>=', 83.0)->count(),
+                  "jumlah_kasus_gizi_normal" => data_bayi_posyandu::where('tinggi_badan', '>=', 83.0)->where('status_gizi', '=', 'Normal')->count(),
+                  "jumlah_kasus_gizi_buruk" => data_bayi_posyandu::where('tinggi_badan', '>=', 83.0)->where('status_gizi', '=', 'Buruk')->count(),
+                  "entrophy" => $this->hitungEntropyTinggiBadan($data->where('tinggi_badan', '>=', 83.0))
+               ]
+            ],
+            "gain" => $gainTinggiBadan
+         ],
+         [
+            "attribute" => 'Jenis Kelamin',
+            "data" => [
+               [
+                  "nilai_attribute" => "Laki-laki",
+                  "jumlah_kasus_total" => data_bayi_posyandu::where('jenis_kelamin', '=', 'L')->count(),
+                  "jumlah_kasus_gizi_normal" => data_bayi_posyandu::where('jenis_kelamin', '=', 'L')->where('status_gizi', '=', 'Normal')->count(),
+                  "jumlah_kasus_gizi_buruk" => data_bayi_posyandu::where('jenis_kelamin', '=', 'L')->where('status_gizi', '=', 'Buruk')->count(),
+                  "entrophy" => $this->hitungEntropyJenisKelamin($data->where('jenis_kelamin', '=', 'L'))
+               ],
+               [
+                  "nilai_attribute" => "Perempuan",
+                  "jumlah_kasus_total" => data_bayi_posyandu::where('jenis_kelamin', '=', 'P')->count(),
+                  "jumlah_kasus_gizi_normal" => data_bayi_posyandu::where('jenis_kelamin', '=', 'P')->where('status_gizi', '=', 'Normal')->count(),
+                  "jumlah_kasus_gizi_buruk" => data_bayi_posyandu::where('jenis_kelamin', '=', 'P')->where('status_gizi', '=', 'Buruk')->count(),
+                  "entrophy" => $this->hitungEntropyJenisKelamin($data->where('jenis_kelamin', '=', 'P'))
+               ]
+            ],
+            "gain" => $gainJenisKelamin
+         ]
+      ];
+
+      $gainTertinggi = $this->cariAtributDenganGainTertinggi($gainUmur, $gainJenisKelamin, $gainBeratBadan, $gainTinggiBadan);
+      
+      // $entrophyTest = $this->hitungEntropyTotal(data_bayi_posyandu::where('Berat_Badan', '>', 16.0)->get());
+      // dd($node1);
+
+      return view('perhitungan', compact('nodes', 'gainTertinggi'));
+    }
+
     public function klasifikasiGiziBayi(Request $request)
     {
         // Mengambil data gizi bayi dari database
@@ -57,7 +214,7 @@ class PrediksiGiziController extends Controller
 
         // ...
         $atributTertinggi = $this->cariAtributDenganGainTertinggi($gainUmur, $gainJenisKelamin, $gainBeratBadan, $gainTinggiBadan);
-            
+
 
         // Kembalikan hasil perhitungan gizi bayi dalam bentuk respons JSON
         return response()->json([
@@ -96,17 +253,27 @@ class PrediksiGiziController extends Controller
                 $gainTertinggi = $gain;
             }
         }
-    
-        return $atributTertinggi;
+        
+        if ($atributTertinggi == 'berat_badan') {
+            return $beratBadanGain;
+        } else if ($atributTertinggi == 'jenis_kelamin') {
+               return $jenisKelaminGain;
+         } else if ($atributTertinggi == 'tinggi_badan') {
+            return $tinggiBadanGain;
+         } else {
+            return $umurGain;
+         }
     }
     
     private function hitungEntropyTotal($data)
     {
         $totalData = $data->count();
+      //   dd($data);
     
         // Menghitung jumlah kemunculan setiap kelas (misalnya status gizi)
         $classCounts = $data->groupBy('status_gizi')->map->count();
-    
+         // dd($classCounts);
+
         // Menghitung entropy total
         $entropyTotal = 0;
         foreach ($classCounts as $classCount) {

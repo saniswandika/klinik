@@ -108,26 +108,107 @@
                     <div class="row mb-4">
                         <div class="col">
                             <div class="form-outline">
-                            <label class="form-label" for="form6Example1">tekanan_darah</label>
-                            <select class="form-select" aria-label="Default select example" name="tekanan_darah">
-                                {{-- @foreach ($roles as $role ) --}}
-                                  <option value="{{ $pendaftaran_pasien->tekanan_darah }}">{{ $pendaftaran_pasien->tekanan_darah }}</option>
-                                  <option value="Normal">Normal</option>
-                                  <option value="Darah Rendah">Darah Rendah</option>
-                                  <option value="Darah Tinggi">Darah Tinggi</option>
-                                {{-- @endforeach --}}
-                            </select> 
+                            <label class="form-label" for="form6Example1">Nik Balita</label>
+                            <input type="text" id="form6Example3" class="form-control" name="NIK"  />
+                            {{-- <input type="text" id="form6Example3" class="form-control" name="NIK" value="{{ $pendaftaran_pasien->name }}" /> --}}
+                          
                             {{-- <input type="text" id="form6Example1" class="form-control"  value="{{ $pendaftaran_pasien->tekanan_darah }}" name="tekanan_darah"/> --}}
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-outline">
-                            <label class="form-label" for="form6Example1">suhu_tubuh</label>
-                            <input type="text" id="form6Example1" class="form-control"  value="{{ $pendaftaran_pasien->suhu_tubuh }}" name="suhu_tubuh"/>
+                            <label class="form-label" for="form6Example1">Nama_Anak</label>
+                            <input type="text" id="form6Example1" class="form-control" name="Nama_Anak"/>
+                            {{-- <input type="text" id="form6Example1" class="form-control"  value="{{ $pendaftaran_pasien->Nama_Anak }}" name="Nama_Anak"/> --}}
                             </div>
                         </div>
                     </div>
-
+                    <div class="row mb-4">
+                        <div class="col">
+                            <div class="form-outline">
+                            <label class="form-label" for="form6Example1">tangggal Lahir</label>
+                            <input type="date" id="form6Example3" class="form-control" name="tgl_lahir"  />
+                            {{-- <input type="text" id="form6Example3" class="form-control" name="NIK" value="{{ $pendaftaran_pasien->name }}" /> --}}
+                          
+                            {{-- <input type="text" id="form6Example1" class="form-control"  value="{{ $pendaftaran_pasien->tekanan_darah }}" name="tekanan_darah"/> --}}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline">
+                            <label class="form-label" for="form6Example1">Umur_Tahun</label>
+                            <input type="Number" id="form6Example1" class="form-control" name="Umur_Tahun"/>
+                            {{-- <input type="text" id="form6Example1" class="form-control"  value="{{ $pendaftaran_pasien->Umur_Tahun }}" name="Nama_Anak"/> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <div class="form-outline">
+                            <label class="form-label" for="form6Example1">Umur_bulan</label>
+                            <input type="number" id="form6Example3" class="form-control" name="Umur_bulan"  />
+                            {{-- <input type="text" id="form6Example3" class="form-control" name="NIK" value="{{ $pendaftaran_pasien->name }}" /> --}}
+                          
+                            {{-- <input type="text" id="form6Example1" class="form-control"  value="{{ $pendaftaran_pasien->tekanan_darah }}" name="tekanan_darah"/> --}}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline">
+                            <label class="form-label" for="form6Example1">jenis_kelamin</label>
+                            {{-- <input type="Number" id="form6Example1" class="form-control" name="jenis_kelamin"/> --}}
+                            <select class="form-control dokter" name="jenis_kelamin">
+                                {{-- @foreach ($usersPerawat as $itemUser) --}}
+                                    <option value="L">Laki-Laki</option>
+                                    <option value="P">Perempuan</option>
+                                {{-- @endforeach --}}
+                            </select>
+                            {{-- <select class="form-control dokter" name="id_perawat">
+                                @foreach ($usersPerawat as $itemUser)
+                                    <option value="{{ $itemUser->id }}">{{ $itemUser->name }}</option>
+                                @endforeach
+                            </select> --}}
+                            {{-- <input type="text" id="form6Example1" class="form-control"  value="{{ $pendaftaran_pasien->Umur_Tahun }}" name="Nama_Anak"/> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <div class="form-outline">
+                            <label class="form-label" for="form6Example1">Nama_Ortu</label>
+                            <input type="text" id="form6Example3" class="form-control" name="Nama_Ortu"  />
+                            {{-- <input type="text" id="form6Example3" class="form-control" name="NIK" value="{{ $pendaftaran_pasien->name }}" /> --}}
+                          
+                            {{-- <input type="text" id="form6Example1" class="form-control"  value="{{ $pendaftaran_pasien->tekanan_darah }}" name="tekanan_darah"/> --}}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline">
+                            <label class="form-label" for="form6Example1">Nik_Ortu</label>
+                            <input type="Number" id="form6Example1" class="form-control" name="Nik_Ortu"/>
+                         
+                            {{-- <input type="text" id="form6Example1" class="form-control"  value="{{ $pendaftaran_pasien->Umur_Tahun }}" name="Nama_Anak"/> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <div class="form-outline">
+                            <label class="form-label" for="form6Example1">Pkm</label>
+                            <input type="text" id="form6Example3" class="form-control" name="Pkm"  />
+                            {{-- <input type="text" id="form6Example3" class="form-control" name="NIK" value="{{ $pendaftaran_pasien->name }}" /> --}}
+                          
+                            {{-- <input type="text" id="form6Example1" class="form-control"  value="{{ $pendaftaran_pasien->tekanan_darah }}" name="tekanan_darah"/> --}}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline">
+                            <label class="form-label" for="form6Example1">Kelurahan</label>
+                            <input type="text" id="form6Example1" class="form-control" name="Kelurahan"/>
+                         
+                            {{-- <input type="text" id="form6Example1" class="form-control"  value="{{ $pendaftaran_pasien->Umur_Tahun }}" name="Nama_Anak"/> --}}
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- Text input -->
                     <div class="row mb-4">
                         <div class="col">
@@ -157,6 +238,26 @@
     </div>
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
+{{-- 	
+        NAMA ANAK	
+        TGL LAHIR	
+        Umur Tahun	
+        Umur Bulan	
+        JENIS KELAMIN	
+        NAMA ORTU	
+        NIK ORTU	
+        NO.HP ORTU	
+        PKM	KEL	
+        POSYANDU	
+        RT	
+        RW	
+        ALAMAT	
+        TGL UKUR	
+        TINGGI	
+        CARA UKUR	
+        BERAT	
+        LILA	
+        LINGKAR UKUR	
+        STATUS GIZI --}}
   
 @endsection

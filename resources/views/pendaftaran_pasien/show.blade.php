@@ -13,20 +13,20 @@
 
                     <ul class="list-group list-group-unbordered mb-3 center">
                         <table width="100%" height="100%" class="table border border-2">
-                            {{-- <tr>
-                                <td width="1px">Nama Klinik</td>
+                            <tr>
+                                <td width="1px">Nama Posyandu</td>
                                 <td  width="1px">:</td>
-                                <td>{{ $pendaftaran_pasien->nama_klinik }}</td>
-                            </tr>   --}}
+                                <td>{{ $pendaftaran_pasien->Posyandu }}</td>
+                            </tr>  
                             <tr>
                                 <td width="1px">Nama Pasien</td>
                                 <td  width="1px">:</td>
-                                <td>{{ $pendaftaran_pasien->Nama_pasien }}</td>
+                                <td>{{ $pendaftaran_pasien->Nama_Anak }}</td>
                             </tr>
                             <tr>
                                 <td width="1px">Alamat</td>
                                 <td  width="1px">:</td>
-                                <td>{{ $pendaftaran_pasien->Alamat }}</td>
+                                <td>{{ $pendaftaran_pasien->Alamat }}, RT{{ $pendaftaran_pasien->Rt }}, RW{{ $pendaftaran_pasien->Rw }}</td>
                             </tr>
                             <tr>
                                 <td width="1px">Tanggal Pendaftaran</td>

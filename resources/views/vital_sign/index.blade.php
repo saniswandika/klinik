@@ -63,8 +63,8 @@
                                     <thead>
                                         <tr>
                                             <th>antrian</th>
-                                            <th>Nama_pasien</th>
-                                            <th>Alamat</th>
+                                            <th>Nama Anak</th>
+                                            {{-- <th>Alamat</th> --}}
                                             <th>tanggal_pendaftaran</th>
                                             <th>waktu_pendaftaran</th>
                                             <th>jenis_kelamin</th>
@@ -84,11 +84,12 @@
                                     <thead>
                                         <tr>
                                             <th>Nomor Antrian</th>
-                                            <th>Tekanan Darah</th>
-                                            <th>Suhu Tubuh</th>
-                                            <th>Laju Respirasi</th>
-                                            <th>Rasi Oksigen</th>
-                                            <th>pulsu</th>
+                                            <th>Cara_Ukur</th>
+                                            <th>Tinggi Badan</th>
+                                            <th>Berat Badan</th>
+                                            <th>Lila</th>
+                                            <th>Lingkar Ukur</th>
+                                            <th>Status Gizi</th>
                                             {{-- <th></th> --}}
                                             {{-- <th>status</th> --}}
                                             <th>Aksi</th>
@@ -122,13 +123,13 @@
                                     name: 'Nomor_antrian'
                                 },
                                 {
-                                    data: 'Nama_pasien',
-                                    name: 'Nama_pasien'
+                                    data: 'Nama_Anak',
+                                    name: 'Nama_Anak'
                                 },
-                                {
-                                    data: 'Alamat',
-                                    name: 'Alamat'
-                                },
+                                // {
+                                //     data: 'Alamat',
+                                //     name: 'Alamat'
+                                // },
                                 {
                                     data: 'tanggal_pendaftaran',
                                     name: 'tanggal_pendaftaran'
@@ -191,24 +192,28 @@
                                     name: 'Nomor_antrian'
                                 },
                                 {
-                                    data: 'tekanan_darah',
-                                    name: 'tekanan_darah'
+                                    data: 'Cara_Ukur',
+                                    name: 'Cara_Ukur'
                                 },
                                 {
-                                    data: 'suhu_tubuh',
-                                    name: 'suhu_tubuh'
+                                    data: 'tinggi_badan',
+                                    name: 'tinggi_badan'
                                 },
                                 {
-                                    data: 'laju_respirasi',
-                                    name: 'laju_respirasi'
+                                    data: 'Berat_Badan',
+                                    name: 'Berat_Badan'
                                 },
                                 {
-                                    data: 'rasi_oksigen',
-                                    name: 'rasi_oksigen'
+                                    data: 'Lila',
+                                    name: 'Lila'
                                 },
                                 {
-                                    data: 'pulsu',
-                                    name: 'pulsu'
+                                    data: 'Lingkar_Ukur',
+                                    name: 'Lingkar_Ukur'
+                                },
+                                {
+                                    data: 'status_gizi',
+                                    name: 'status_gizi'
                                 },
                                 {
                                     data: null,

@@ -42,8 +42,8 @@
                 <input type="text" id="form6Example3" class="form-control" name="role_id" />
             </div> --}}
             <div class="form-outline mb-4">
-                <label class="form-label" for="form6Example3">Klinik</label>
-                <input type="text" id="form6Example3" class="form-control" value="kllinik cahaya abadi" readonly />
+                <label class="form-label" for="form6Example3">Posyandu</label>
+                <input type="text" id="form6Example3" class="form-control" value="Sekar Tanjung C" readonly />
                         <input type="hidden" value="1" name="Klinik_id">
             </div>
             <div class="form-outline mb-4">
@@ -56,11 +56,11 @@
                 <div class="row mb-4">
                   <div class="col">
                     <div class="form-outline">
-                      <label class="form-label" for="form6Example1">Nama Pasien</label>
+                      <label class="form-label" for="form6Example1">Nama Anak</label>
                       @if ($userlogin->name == 'Admin')
-                      <input type="text" id="form6Example1" class="form-control" value="" name="Nama_pasien"/>
+                      <input type="text" id="form6Example1" class="form-control" value="" name="Nama_Anak"/>
                       @else
-                      <input type="text" id="form6Example1" class="form-control" value="{{Auth::user()->name}}" name="Nama_pasien"/> 
+                      <input type="text" id="form6Example1" class="form-control" value="{{Auth::user()->name}}" name="Nama_Anak"/> 
                       @endif
                   
                     </div>
@@ -87,7 +87,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-outline mb-4">
+                {{-- <div class="form-outline mb-4">
                     <label class="form-label" for="form6Example7">Alamat Pasien</label>
                     @if ($userlogin->name == 'Admin')
                     <textarea class="form-control" id="form6Example7" rows="4" name="Alamat"></textarea>
@@ -96,7 +96,7 @@
                     @endif
                  
                   
-                </div>
+                </div> --}}
                 <!-- Text input -->
                 <div class="row mb-4">
                     <div class="col">

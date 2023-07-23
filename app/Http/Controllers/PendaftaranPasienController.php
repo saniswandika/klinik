@@ -43,7 +43,7 @@ class PendaftaranPasienController extends Controller
         if ($userlogin->name != 'pasien') {
             $today = Carbon::today();
             $query = DB::table('pendaftaran_pasiens')
-                ->leftjoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_pasien')
+                ->leftjoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_Anak')
                 // ->leftjoin('roles', 'roles.id', '=', 'rekomendasi_rekativasi_pbi_jks.tujuan_pbijk')
                 ->leftjoin('antrians', 'antrians.id_pendafataran', '=', 'pendaftaran_pasiens.id')
                 ->select('pendaftaran_pasiens.*','antrians.Nomor_antrian')
@@ -55,7 +55,7 @@ class PendaftaranPasienController extends Controller
             // dd($query);
         }else{
             $query = DB::table('pendaftaran_pasiens')
-            ->leftjoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_pasien')
+            ->leftjoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_Anak')
             // ->leftjoin('roles', 'roles.id', '=', 'rekomendasi_rekativasi_pbi_jks.tujuan_pbijk')
             ->leftjoin('antrians', 'antrians.id_pendafataran', '=', 'pendaftaran_pasiens.id')
             ->select('pendaftaran_pasiens.*','antrians.Nomor_antrian')
@@ -67,7 +67,7 @@ class PendaftaranPasienController extends Controller
             // dd($query);
             $search = $request->search['value'];
             $query->where(function ($query) use ($search) {
-                $query->where('pendaftaran_pasiens.Nama_pasien', 'like', "%$search%");
+                $query->where('pendaftaran_pasiens.Nama_Anak', 'like', "%$search%");
             });
         }
         $total_filtered_items = $query->count();
@@ -107,21 +107,27 @@ class PendaftaranPasienController extends Controller
             ->select('model_has_roles.*')
             ->where('model_has_roles.model_id', Auth::user()->id)
             ->first();
-        // dd($query);
+        $dataBayiPosyandu = DB::table('data_bayi_posyandus')
+            ->select('data_bayi_posyandus.*')
+            ->where('data_bayi_posyandus.user_id', Auth::user()->id)
+            ->first();
+        // dd($dataBayiPosyandu);
         // dd($request->all());
         $pendaftaranPasien = new pendaftaran_pasien;
-        $pendaftaranPasien->Nama_pasien = $request->get('Nama_pasien');
+        $pendaftaranPasien->Nama_Anak = $request->get('Nama_Anak');
         $pendaftaranPasien->Alamat = $request->get('Alamat');
         $pendaftaranPasien->tanggal_pendaftaran = $request->get('tanggal_pendaftaran');
         $pendaftaranPasien->waktu_pendaftaran = $request->get('waktu_pendaftaran');
         $pendaftaranPasien->jenis_kelamin = $request->get('jenis_kelamin');
         $pendaftaranPasien->role_id = $getrole->role_id;
         $pendaftaranPasien->klinik_id = $request->get('klinik_id');
-        // $pendaftaranPasien->status = $request->get('status');
+        // $pendaftaranPasien->klinik_id = $request->get('klinik_id');
+        
+        $pendaftaranPasien->id_data_bayi_posyandu = $dataBayiPosyandu->id;
         $pendaftaranPasien->user_id = $request->get('user_id');
         $pendaftaranPasien->created_by = Auth::user()->name;
-        $pendaftaranPasien->save();
         // dd($pendaftaranPasien);
+        $pendaftaranPasien->save();
         
         $antrianterakhir = antrian::whereDate('created_at', Carbon::today())->max('Nomor_antrian');
 
@@ -150,10 +156,11 @@ class PendaftaranPasienController extends Controller
     public function show($id)
     {
         $pendaftaran_pasien = DB::table('pendaftaran_pasiens')
-            ->leftjoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_pasien')
+            ->leftjoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_Anak')
             ->leftjoin('kliniks', 'kliniks.id', '=', 'pendaftaran_pasiens.klinik_id')
+            ->leftjoin('data_bayi_posyandus', 'data_bayi_posyandus.Nama_Anak', '=', 'pendaftaran_pasiens.Nama_Anak')
             ->leftjoin('antrians', 'antrians.id_pendafataran', '=', 'pendaftaran_pasiens.id')
-            ->select('pendaftaran_pasiens.*','antrians.Nomor_antrian','antrians.tanggal_antrian','antrians.waktu_antrian','kliniks.nama_klinik','users.name')
+            ->select('pendaftaran_pasiens.*','antrians.Nomor_antrian','antrians.tanggal_antrian','antrians.waktu_antrian','kliniks.nama_posyandu','users.name','data_bayi_posyandus.*')
             ->where('pendaftaran_pasiens.id', $id)->first();
         // dd($pendaftaran_pasien);
 
@@ -174,7 +181,7 @@ class PendaftaranPasienController extends Controller
         ->where('users.name', $user_name )
         ->first();
         $pendaftaran_pasien = DB::table('pendaftaran_pasiens')
-        ->leftjoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_pasien')
+        ->leftjoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_Anak')
         ->leftjoin('kliniks', 'kliniks.id', '=', 'pendaftaran_pasiens.klinik_id')
         ->leftjoin('antrians', 'antrians.id_pendafataran', '=', 'pendaftaran_pasiens.id')
         ->select('pendaftaran_pasiens.*','antrians.Nomor_antrian','antrians.tanggal_antrian','antrians.waktu_antrian','kliniks.nama_klinik','users.name')
@@ -195,7 +202,7 @@ class PendaftaranPasienController extends Controller
         // dd($query);
         // dd($request->all());
         $pendaftaranPasien = pendaftaran_pasien::find($pendaftaran_pasien->id);
-        $pendaftaranPasien->Nama_pasien = $request->get('Nama_pasien');
+        $pendaftaranPasien->Nama_Anak = $request->get('Nama_Anak');
         $pendaftaranPasien->Alamat = $request->get('Alamat');
         $pendaftaranPasien->tanggal_pendaftaran = $request->get('tanggal_pendaftaran');
         $pendaftaranPasien->waktu_pendaftaran = $request->get('waktu_pendaftaran');
@@ -260,6 +267,18 @@ class PendaftaranPasienController extends Controller
             ->select('roles.name')
             ->where('users.name', $user_name)
             ->first();
+
+            $userlogin = DB::table('model_has_roles')
+            // ->leftJoin('model_has_roles', 'model_has_roles.model_id', '=', 'wilayahs.createdby')
+            ->leftJoin('users', 'users.id', '=', 'model_has_roles.model_id')
+            // ->leftJoin('users as usr_name', 'usr_name.name', '=', 'data_bayi_posyandus.Nama_Anak')
+            ->leftJoin('roles', 'roles.id', '=', 'model_has_roles.role_id')
+            ->select('roles.name')
+            ->where('users.name', $user_name)
+            ->first();
+            // dd($userlogin);
+
+
             return view('pendaftaran_pasien.create',compact('userlogin'));
     }
     

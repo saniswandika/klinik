@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Arr;
 use App\Exports\UsersExport;
 use App\Imports\DtkssImport;
+use App\Models\data_bayi_posyandu;
 // use App\Models\Event;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\HeadingRowImport;
@@ -70,9 +71,9 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'alamat' => 'required',
+            // 'alamat' => 'required',
             'jenis_kelamin' => 'required',
-            'no_telepon' => 'required',
+            // 'no_telepon' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
             'roles' => 'required'
@@ -190,5 +191,48 @@ class UserController extends Controller
             ->where('wilayahs.status_wilayah', '1')
             ->get();
         return $users_role;
+    }
+    public function Registrasi(Request $request)
+    {
+        $this->validate($request, [
+            'Kelurahan' => 'required',
+            'Pkm' => 'required',
+            'Alamat' => 'required',
+            'jenis_kelamin' => 'required',
+            'Nik_bayi' => 'required', // Unique in data_bayi_posyandu table
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|same:confirm-password',// Use "confirmed" validation rule for password confirmation
+            'roles' => 'required',
+            'Nama_Anak' => 'required',
+            'Tgl_Lahir' => 'required',
+            'Umur_bulan' => 'required',
+            'Umur_Tahun' => 'required',
+            'Nik_Ortu' => 'required',
+            'Nama_Ortu' => 'required',
+            'No_hp_Ortu' => 'required',
+            'Posyandu' => 'required' // Assuming this field is for the Posyandu name
+        ]);
+
+        $input['email'] = $request->input('email');
+        $input['jenis_kelamin'] = $request->input('jenis_kelamin');
+        $input['name'] = $request->input('Nama_Anak');
+        $input['password'] = Hash::make($request->input('password'));
+
+        $user = User::create($input);
+        $user->assignRole($request->input('roles'));
+
+        $dataBayi = $request->only([
+            'Nama_Anak', 'Nik_bayi', 'Tgl_Lahir', 'Umur_bulan', 'Umur_Tahun',
+            'Nik_Ortu', 'Nama_Ortu', 'No_hp_Ortu', 'Alamat', 'Pkm', 'Kelurahan',
+            'Rw', 'Rt', 'Posyandu', 'jenis_kelamin'
+        ]);
+        $dataBayi['user_id'] = $user->id;
+        data_bayi_posyandu::create($dataBayi);
+
+        if ($user) {
+            Alert::success('Tambah Data Pasien Berhasil Disimpan');
+            return redirect()->back()
+                ->with('masuk', 'User created successfully');
+        }
     }
 }

@@ -19,10 +19,12 @@ Route::get('/', function () {
     return view('auth.login');
 });
 Route::resource('users', UserController::class);
+// Route::post('/form-prediksi', 'UserController@index')->name('index');
+Route::post('/Registrasi', [UserController::class, 'Registrasi'])->name('DaftarAkun');
+
 Route::get('/form-prediksi', [PrediksiGiziController::class, 'index'])->name('form-prediksi');
 Route::get('/table-prediksi', [PrediksiGiziController::class, 'perhitungan'])->name('table-prediksi');
 Route::get('/perhitungan', [PrediksiGiziController::class, 'perhitungan'])->name('perhitungan');
-// Route::post('/form-prediksi', 'PrediksiGiziController@index')->name('index');
 // Route::get('/hasil-prediksi', 'PrediksiGiziController@prediksi')->name('hasil.prediksi');
 
 Route::post('/baby_nutrition', [PrediksiGiziController::class, 'predict'])->name('baby_nutrition.predict');
@@ -66,6 +68,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::POST('vital_sign', [VitalSignController::class, 'store'])->name('vital_sign.store');
     Route::get('vital_sign/{id}/edit', [VitalSignController::class, 'edit'])->name('vitalsign.edit');
     Route::POST('vital_sign/{id_vitalsign}', [VitalSignController::class, 'update'])->name('vitalsign.update');
+    Route::POST('prosesPrediksi/{id}', [VitalSignController::class, 'updateDataBayiPosyandu'])->name('prosesPrediksi');
     Route::get('vital_sign', [VitalSignController::class, 'index'])->name('vital_sign.index');
     Route::get('prosesVitalSign/{id}', [VitalSignController::class, 'proses'])->name('prosesVitalSign');
     Route::get('getdatavitalsign', [VitalSignController::class, 'getdatavitalsign'])->name('getdatavitalsign');

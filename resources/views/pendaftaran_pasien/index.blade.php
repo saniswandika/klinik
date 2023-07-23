@@ -53,11 +53,11 @@
                                     <thead>
                                         <tr>
                                             <th>antrian</th>
-                                            <th>Nama_pasien</th>
-                                            <th>Alamat</th>
-                                            <th>tanggal_pendaftaran</th>
-                                            <th>waktu_pendaftaran</th>
-                                            <th>jenis_kelamin</th>
+                                            <th>Nama Anak</th>
+                                            {{-- <th>Alamat</th> --}}
+                                            <th>Tanggal Pendaftaran</th>
+                                            <th>Waktu Pendaftaran</th>
+                                            <th>Jenis Kelamin</th>
                                             {{-- <th></th> --}}
                                             {{-- <th>status</th> --}}
                                             <th>Aksi</th>
@@ -94,12 +94,8 @@
                                     name: 'Nomor_antrian'
                                 },
                                 {
-                                    data: 'Nama_pasien',
-                                    name: 'Nama_pasien'
-                                },
-                                {
-                                    data: 'Alamat',
-                                    name: 'Alamat'
+                                    data: 'Nama_Anak',
+                                    name: 'Nama_Anak'
                                 },
                                 {
                                     data: 'tanggal_pendaftaran',

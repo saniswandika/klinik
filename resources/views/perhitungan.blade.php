@@ -239,7 +239,7 @@
           <div class="card-body">
               <h4>Node 1</h4>
               <div class="table-responsive-sm">                
-                  <table class="table border border-primary" style="width:100%;  border: 1px solid black; border-collapse: collapse; position: relative;">
+                  <table class="table" style="width:100%;">
                         <tr>
                           {{-- <th>Name</th>
                           <th>Name</th> --}}

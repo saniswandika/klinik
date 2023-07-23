@@ -10,7 +10,7 @@ class pendaftaran_pasien extends Model
     use HasFactory;
 
     protected $fillable = [
-        'Nama_pasien',
+        'Nama_Anak',
          'Alamat',
          'tanggal_pendaftaran',
          'waktu_pendaftaran',

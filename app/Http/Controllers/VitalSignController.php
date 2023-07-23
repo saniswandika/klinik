@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\vitalSign;
 use App\Models\antrian;
+use App\Models\data_bayi_posyandu;
 use App\Models\pendaftaran_pasien;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -29,19 +30,18 @@ class VitalSignController extends Controller
         $user_name = Auth::user()->name;
         $today = Carbon::today();
         $query = DB::table('pendaftaran_pasiens')
-            ->leftjoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_pasien')
+            ->leftjoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_Anak')
             // ->leftjoin('roles', 'roles.id', '=', 'rekomendasi_rekativasi_pbi_jks.tujuan_pbijk')
             ->leftjoin('antrians', 'antrians.id_pendafataran', '=', 'pendaftaran_pasiens.id')
             ->select('pendaftaran_pasiens.*','antrians.Nomor_antrian')
             // ->where('pendaftaran_pasiens.created_by',$user_name)
-            ->whereDate('pendaftaran_pasiens.created_at', '=', $today)
-            ->distinct();
+            ->whereDate('pendaftaran_pasiens.created_at', '=', $today);
         // dd($query);
         if ($request->has('search')) {
             // dd($query);
             $search = $request->search['value'];
             $query->where(function ($query) use ($search) {
-                $query->where('pendaftaran_pasiens.Nama_pasien', 'like', "%$search%");
+                $query->where('pendaftaran_pasiens.Nama_Anak', 'like', "%$search%");
             });
         }
         $total_filtered_items = $query->count();
@@ -72,29 +72,29 @@ class VitalSignController extends Controller
             $query = DB::table('vitalsign')
             ->leftJoin('antrians', 'vitalsign.id_antrian', '=', 'antrians.id_antrian')
             ->leftJoin('pendaftaran_pasiens', 'pendaftaran_pasiens.id', '=', 'antrians.id_pendafataran')
-            // ->leftJoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_pasien')
+            // ->leftJoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_Anak')
             ->select('pendaftaran_pasiens.*', 'antrians.Nomor_antrian','vitalsign.*')
             ->where('pendaftaran_pasiens.created_by',$user_name)
             ->distinct();
         }elseif($user_wilayah->name == 'perawat'){
         
-            $query = DB::table('vitalsign')
-            ->leftjoin('users', 'users.id', '=', 'vitalsign.id_perawat')
-            ->leftjoin('antrians', 'antrians.id_antrian', '=', 'vitalsign.id_antrian')
+            $query = DB::table('data_bayi_posyandus')
+            ->leftjoin('users', 'users.id', '=', 'data_bayi_posyandus.id_perawat')
+            ->leftjoin('antrians', 'antrians.id_antrian', '=', 'data_bayi_posyandus.id_antrian')
             // ->leftjoin('roles', 'roles.id', '=', 'rekomendasi_rekativasi_pbi_jks.tujuan_pbijk')
-            // ->leftjoin('antrians', 'antrians.id_pendafataran', '=', 'vitalsign.id')
-            ->select('vitalsign.*','antrians.*','users.*')
-            ->where('vitalsign.deleted_at', null)
-            ->where('vitalsign.created_by',Auth::user()->id)
+            // ->leftjoin('antrians', 'antrians.id_pendafataran', '=', 'data_bayi_posyandus.id')
+            ->select('data_bayi_posyandus.*','antrians.*','users.*')
+            ->where('data_bayi_posyandus.deleted_at', null)
+            ->where('data_bayi_posyandus.updated_by',Auth::user()->id)
             ->orderBy('Nomor_antrian', 'asc');
         }else {
         $today = Carbon::today();
 
-            $query = DB::table('vitalsign')
-            ->leftJoin('antrians', 'vitalsign.id_antrian', '=', 'antrians.id_antrian')
+            $query = DB::table('data_bayi_posyandus')
+            ->leftJoin('antrians', 'data_bayi_posyandus.id_antrian', '=', 'antrians.id_antrian')
             ->leftJoin('pendaftaran_pasiens', 'pendaftaran_pasiens.id', '=', 'antrians.id_pendafataran')
-            // ->leftJoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_pasien')
-            ->select('pendaftaran_pasiens.*', 'antrians.Nomor_antrian','vitalsign.*')
+            // ->leftJoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_Anak')
+            ->select('pendaftaran_pasiens.*', 'antrians.Nomor_antrian','data_bayi_posyandus.*')
             // ->where('pendaftaran_pasiens.created_by',$user_name)
             ->whereDate('pendaftaran_pasiens.created_at', '=', $today)
             ->distinct();
@@ -104,7 +104,7 @@ class VitalSignController extends Controller
             // dd($query);
             $search = $request->search['value'];
             $query->where(function ($query) use ($search) {
-                $query->where('vitalsign.id_antrian', 'like', "%$search%");
+                $query->where('data_bayi_posyandus.id_antrian', 'like', "%$search%");
             });
         }
         $total_filtered_items = $query->count();
@@ -249,15 +249,78 @@ class VitalSignController extends Controller
         ->select('users.id','users.name')
         ->where('roles.name', 'perawat')->get();
         $pendaftaran_pasien = DB::table('pendaftaran_pasiens')
-        ->leftjoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_pasien')
+        ->leftjoin('users', 'users.id', '=', 'pendaftaran_pasiens.Nama_Anak')
         ->leftjoin('kliniks', 'kliniks.id', '=', 'pendaftaran_pasiens.klinik_id')
         ->leftjoin('antrians', 'antrians.id_pendafataran', '=', 'pendaftaran_pasiens.id')
-        ->select('pendaftaran_pasiens.*','antrians.Nomor_antrian','antrians.id_antrian','antrians.tanggal_antrian','antrians.waktu_antrian','kliniks.nama_klinik','users.name')
+        ->leftjoin('data_bayi_posyandus', 'data_bayi_posyandus.id', '=', 'pendaftaran_pasiens.id_data_bayi_posyandu')
+        ->select('data_bayi_posyandus.*','data_bayi_posyandus.id as id_byp','pendaftaran_pasiens.*','antrians.Nomor_antrian','antrians.id_antrian','antrians.tanggal_antrian','antrians.waktu_antrian','kliniks.nama_posyandu','users.name')
         ->where('pendaftaran_pasiens.id', $id)->first();
-
+        // dd($pendaftaran_pasien);
         // return view('pendaftaran_pasien.edit',compact('pendaftaran_pasien'));
-        return view('vital_sign.create',compact('usersPerawat','pendaftaran_pasien'));
+        return view('vital_sign.proses',compact('usersPerawat','pendaftaran_pasien'));
      
         // return view('vital_sign.create');
+    }
+    public function updateDataBayiPosyandu(Request $request, $id)
+    {
+        // Find the record to update
+        $vital_sign = data_bayi_posyandu::findOrFail($id);
+    
+        // Update vital sign data from the request
+        $vital_sign->id_antrian = $request->get('id_antrian');
+        $vital_sign->id_perawat = $request->get('id_perawat');
+        $vital_sign->Cara_Ukur = $request->get('Cara_Ukur');
+        $vital_sign->Tgl_Ukur = $request->get('Tgl_Ukur');
+        $vital_sign->tinggi_badan = $request->get('tinggi_badan');
+        $vital_sign->Berat_Badan = $request->get('Berat_Badan');
+        $vital_sign->Lila = $request->get('Lila');
+        // $vital_sign->Lingkar_kepala = $request->get('Lingkar_kepala');
+        $vital_sign->Lingkar_Ukur = $request->get('Lingkar_Ukur');
+    
+        // Calculate the "status_gizi" based on the given conditions
+        $usia = $request->get('Umur_Tahun'); // Assuming 'Umur_Tahun' contains the age in years
+        $jenis_kelamin = $vital_sign->jenis_kelamin; // Assuming 'jenis_kelamin' is a field in 'data_bayi_posyandu'
+    
+        if ($request->get('Berat_Badan') > 16) {
+            $result = 'Normal';
+        } elseif ($request->get('Berat_Badan') > 14) {
+            if ($usia > 36) {
+                $result = 'Buruk';
+            } else {
+                $result = 'Normal';
+            }
+        } elseif ($usia > 13) {
+            if ($usia > 17) {
+                $result = 'Buruk';
+            } else {
+                if ($request->get('tinggi_badan') > 83) {
+                    if ($jenis_kelamin == 'L') {
+                        $result = 'Buruk';
+                    } else {
+                        $result = 'Normal';
+                    }
+                } else {
+                    $result = 'Buruk';
+                }
+            }
+        } else {
+            if ($request->get('Berat_Badan') > 9.8) {
+                $result = 'Normal';
+            } else {
+                $result = 'Buruk';
+            }
+        }
+    
+        // Assign the calculated status to 'status_gizi'
+        $vital_sign->status_gizi = $result;
+    
+        // Set the 'updated_by' field to the current authenticated user's ID
+        $vital_sign->updated_by = Auth::user()->id;
+        // dd($vital_sign);
+        // Save the updated record
+        $vital_sign->save();
+    
+        // Redirect back or perform any other actions as needed
+        // ...
     }
 }
